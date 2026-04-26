@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+app/data/tabor.sqlite
+app/data/uploads/
+.venv/
+.env
+.DS_Store

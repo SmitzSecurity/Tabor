@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Review — Tabor{% endblock %}
+{% block content %}
+<section class="review-shell" data-total="{{ due_count }}">
+  <h1>Spaced-repetition review</h1>
+  <p class="subtitle">{{ due_count }} due of {{ total_cards }} total cards. Rate your recall after each card.</p>
+  {% if not cards %}
+    <div class="empty">
+      <h3>Nothing due right now.</h3>
+      <p>Generate flashcards from a chapter to start a queue, or come back later as cards mature.</p>
+      <p><a class="btn" href="/">Back to library</a></p>
+    </div>
+  {% else %}
+  <div id="card-stack" class="card-stack">
+    {% for c in cards %}
+    <article class="rcard {% if loop.first %}active{% endif %}" data-id="{{ c.id }}" data-front='{{ c.front|tojson }}' data-back='{{ c.back|tojson }}'>
+      <header><span class="rcard-source">{{ c.book_title }} · {{ c.chapter_title }}</span></header>
+      <div class="rcard-front">{{ c.front }}</div>
+      <div class="rcard-back hidden">{{ c.back }}</div>
+      <div class="rcard-actions">
+        <button class="btn show">Show answer</button>
+        <div class="rate hidden">
+          <button class="btn quality" data-q="0">Again</button>
+          <button class="btn quality" data-q="3">Hard</button>
+          <button class="btn quality" data-q="4">Good</button>
+          <button class="btn quality" data-q="5">Easy</button>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  <div id="review-progress" class="review-progress">0 / {{ due_count }}</div>
+  {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}<script>Tabor.initReview();</script>{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Tabor — Library{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>Your reading, made retentive.</h1>
+    <p class="subtitle">Upload an EPUB, PDF, or text file and Tabor turns each chapter into a tutor, a quiz, and a spaced-repetition deck.</p>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><span class="kpi-num">{{ books|length }}</span><span class="kpi-label">books</span></div>
+    <div class="kpi"><span class="kpi-num">{{ flashcard_count }}</span><span class="kpi-label">cards</span></div>
+    <div class="kpi"><span class="kpi-num">{{ highlight_count }}</span><span class="kpi-label">highlights</span></div>
+    <div class="kpi {% if due_count %}due{% endif %}"><span class="kpi-num">{{ due_count }}</span><span class="kpi-label">due today</span></div>
+  </div>
+</section>
+
+{% if airlock_required %}
+<section class="airlock-banner">
+  <div>
+    <strong>Airlock engaged.</strong> You have {{ due_count }} flashcards due — clear them to unlock today's reading.
+  </div>
+  <a class="btn primary" href="/review">Open review</a>
+</section>
+{% endif %}
+
+<section class="upload-card">
+  <form id="upload-form" method="post" enctype="multipart/form-data" action="/api/upload">
+    <label for="file" class="drop">
+      <span class="drop-title">Drop a file here</span>
+      <span class="drop-sub">EPUB · PDF · TXT · MD</span>
+      <input id="file" type="file" name="file" accept=".pdf,.epub,.txt,.md" required />
+    </label>
+    <button class="btn primary" type="submit">Add to library</button>
+    <span id="upload-status" class="status-msg"></span>
+  </form>
+</section>
+
+<section class="book-grid">
+  {% if not books %}
+    <div class="empty">
+      <h3>No books yet.</h3>
+      <p>Upload an EPUB or PDF to get started. Try a public-domain text from Project Gutenberg.</p>
+    </div>
+  {% endif %}
+  {% for b in books %}
+  <a class="book-card" href="/book/{{ b.id }}?c={{ b.last_chapter_idx }}">
+    <div class="cover" data-letter="{{ b.title[:1]|upper }}">{{ b.title[:1]|upper }}</div>
+    <div class="book-meta">
+      <h3>{{ b.title }}</h3>
+      <p class="author">{{ b.author or 'Unknown' }}</p>
+      <p class="progress">{{ b.completed_count }} / {{ b.chapter_count }} chapters</p>
+      <div class="bar"><span style="width: {% if b.chapter_count %}{{ (100 * b.completed_count // b.chapter_count) }}%{% else %}0%{% endif %}"></span></div>
+    </div>
+    <button class="delete" data-id="{{ b.id }}" title="Remove book">×</button>
+  </a>
+  {% endfor %}
+</section>
+{% endblock %}
+{% block scripts %}<script>Tabor.initLibrary();</script>{% endblock %}

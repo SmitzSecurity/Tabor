@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Settings — Tabor{% endblock %}
+{% block content %}
+<section class="settings-shell">
+  <h1>Settings</h1>
+  <form method="post" action="/settings" class="settings-form">
+    <fieldset>
+      <legend>On-device AI</legend>
+      <p class="hint">Point Tabor at any OpenAI-compatible local server (Ollama, LM Studio, llama.cpp). Leave blank to use the offline heuristic engine.</p>
+      <label>Endpoint <input name="ai_endpoint" type="url" placeholder="http://localhost:11434/v1" value="{{ settings.ai_endpoint }}" /></label>
+      <label>Model <input name="ai_model" type="text" value="{{ settings.ai_model }}" /></label>
+      <label>API key (optional) <input name="ai_api_key" type="password" value="{{ settings.ai_api_key }}" /></label>
+    </fieldset>
+    <fieldset>
+      <legend>Airlock</legend>
+      <p class="hint">Require a minimum number of due-card reviews before the library unlocks for the day.</p>
+      <label class="check"><input type="checkbox" name="airlock_enabled" {% if settings.airlock_enabled == '1' %}checked{% endif %}> Engage airlock when cards are due</label>
+      <label>Minimum reviews <input name="airlock_min_reviews" type="number" min="1" value="{{ settings.airlock_min_reviews }}" /></label>
+    </fieldset>
+    <fieldset>
+      <legend>Focus</legend>
+      <label>Default session length (minutes) <input name="focus_default_minutes" type="number" min="5" value="{{ settings.focus_default_minutes }}" /></label>
+      <label>Reading language <input name="user_language" type="text" value="{{ settings.user_language }}" /></label>
+    </fieldset>
+    <button class="btn primary" type="submit">Save</button>
+  </form>
+</section>
+{% endblock %}

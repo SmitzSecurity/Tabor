@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}{{ book.title }} — Tabor{% endblock %}
+{% block content %}
+<div class="reader-shell" data-book-id="{{ book.id }}" data-chapter-id="{{ active.id }}" data-chapter-idx="{{ active.idx }}" data-total="{{ chapters|length }}">
+  <aside class="sidebar">
+    <h2 class="book-title">{{ book.title }}</h2>
+    <p class="book-author">{{ book.author }}</p>
+    <div class="focus-controls">
+      <button id="focus-toggle" class="btn ghost">Focus session</button>
+      <span id="focus-timer" class="timer">{{ settings.focus_default_minutes }}:00</span>
+    </div>
+    <ol class="toc">
+      {% for ch in chapters %}
+      <li class="{% if ch.id == active.id %}active{% endif %} {% if ch.completed %}done{% endif %}">
+        <a href="/book/{{ book.id }}?c={{ ch.idx }}">
+          <span class="ch-idx">{{ '%02d' % (ch.idx + 1) }}</span>
+          <span class="ch-title">{{ ch.title }}</span>
+          <span class="ch-words">{{ ch.word_count }} w</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+  </aside>
+
+  <section class="reader">
+    <div class="reader-header">
+      <div>
+        <h1 id="chapter-title">{{ active.title }}</h1>
+        <p class="reader-sub">Chapter {{ active.idx + 1 }} of {{ chapters|length }} · {{ active.word_count }} words</p>
+      </div>
+      <div class="reader-actions">
+        <button id="btn-summarize" class="btn">Generate study notes</button>
+        <button id="btn-suggest" class="btn">Suggest highlights</button>
+        <button id="btn-flashcards" class="btn">Make flashcards</button>
+        <button id="btn-quiz" class="btn">End-of-chapter quiz</button>
+        <label class="check"><input type="checkbox" id="chapter-done" {% if active.completed %}checked{% endif %} /> mark complete</label>
+      </div>
+    </div>
+    <article id="chapter-body" class="chapter-body">{{ active.content }}</article>
+
+    <div id="notes-block" class="notes-block {% if not active.ai_notes %}hidden{% endif %}">
+      <h3>AI study notes</h3>
+      <pre id="notes-text">{{ active.ai_notes or '' }}</pre>
+    </div>
+
+    <div id="quiz-block" class="quiz-block hidden">
+      <h3>Active recall</h3>
+      <ol id="quiz-list"></ol>
+    </div>
+
+    <div class="chapter-nav">
+      {% if active.idx > 0 %}<a class="btn ghost" href="/book/{{ book.id }}?c={{ active.idx - 1 }}">← previous</a>{% else %}<span></span>{% endif %}
+      {% if active.idx + 1 < chapters|length %}<a class="btn primary" href="/book/{{ book.id }}?c={{ active.idx + 1 }}">next chapter →</a>{% endif %}
+    </div>
+  </section>
+
+  <aside class="copilot">
+    <div class="tabs">
+      <button class="tab active" data-tab="chat">Tutor</button>
+      <button class="tab" data-tab="highlights">Highlights ({{ highlights|length }})</button>
+      <button class="tab" data-tab="cards">Flashcards ({{ chapter_cards }})</button>
+    </div>
+
+    <div class="tab-pane" data-pane="chat">
+      <div id="chat-log" class="chat-log">
+        {% for m in history %}
+        <div class="msg {{ m.role }}"><span class="role">{{ m.role }}</span><div class="bubble">{{ m.content }}</div></div>
+        {% endfor %}
+        {% if not history %}<p class="muted">Ask the tutor something about this chapter, or hold the mic to talk.</p>{% endif %}
+      </div>
+      <form id="chat-form" class="chat-form">
+        <button type="button" id="mic-btn" class="mic" title="Hold to speak">🎙</button>
+        <input id="chat-input" type="text" placeholder="Ask about this chapter…" autocomplete="off" />
+        <button type="submit" class="btn primary">Send</button>
+      </form>
+      <p class="hint">Tip: select text in the chapter to instantly turn it into a highlight.</p>
+    </div>
+
+    <div class="tab-pane hidden" data-pane="highlights">
+      <ul id="highlight-list" class="highlight-list">
+        {% for h in highlights %}
+        <li data-id="{{ h.id }}"><blockquote>{{ h.text }}</blockquote>{% if h.note %}<p class="note">{{ h.note }}</p>{% endif %}<button class="link-btn">remove</button></li>
+        {% endfor %}
+        {% if not highlights %}<li class="muted">No highlights yet — select any sentence in the chapter to save it.</li>{% endif %}
+      </ul>
+      <div id="suggestion-box" class="suggestion-box hidden"><h4>AI suggestions</h4><ul id="suggestion-list"></ul></div>
+    </div>
+
+    <div class="tab-pane hidden" data-pane="cards">
+      <p class="muted"><a href="/api/anki-export?book_id={{ book.id }}">Export to Anki TSV</a></p>
+      <div id="card-preview" class="card-preview"></div>
+      <p class="hint">Cards saved here automatically enter your spaced-repetition queue.</p>
+    </div>
+  </aside>
+</div>
+{% endblock %}
+{% block scripts %}<script>Tabor.initReader();</script>{% endblock %}

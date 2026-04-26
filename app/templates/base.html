@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Tabor{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">
+      <span class="logo">T</span>
+      <span class="brand-name">Tabor</span>
+      <span class="brand-tag">active reading</span>
+    </a>
+    <nav class="nav">
+      <a href="/" class="nav-link">Library</a>
+      <a href="/review" class="nav-link">Review {% if due_count is defined and due_count %}<span class="pill">{{ due_count }}</span>{% endif %}</a>
+      <a href="/settings" class="nav-link">Settings</a>
+    </nav>
+    <div class="ai-status">
+      {% if ai_configured %}
+        <span class="dot ok"></span> on-device AI
+      {% else %}
+        <span class="dot warn"></span> heuristic mode
+      {% endif %}
+    </div>
+  </header>
+  <main class="content">
+    {% block content %}{% endblock %}
+  </main>
+  <script src="/static/app.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
