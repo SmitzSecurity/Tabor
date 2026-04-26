@@ -1,15 +1,24 @@
-Tabor: Active Reading & Cognitive Illumination
-Overview
-Tabor is an offline-first, AI-integrated reading environment designed to bridge the gap between passive consumption and active retention. It combines a distraction-free digital ecosystem with localized LLM processing to turn any text into a bidirectional learning experience.
+# Tabor
 
-Core Features for MVP
+Offline-first, active-reading web app: import PDFs (IndexedDB), read in the browser, generate flashcards (mock AI or [Ollama](https://ollama.com/)), export tab-separated text for Anki import, and use a configurable **airlock** (local card reviews before the rest of the UI) plus a **focus** overlay (timer + page flips).
 
-The Airlock Protocol: A rigorous digital minimalism feature. Tabor can be set to auto-launch in Kiosk Mode upon morning alarm dismissal. Users must complete a set number of pages or their daily Anki flashcard review to "unlock" the rest of the device.
+## Run the app
 
-Daily Strategic Briefing Dashboard: A morning overview screen tracking reading streaks, pending spaced-repetition cards, and AI-generated synthesis from the previous day's chapters.
+```bash
+cd web
+npm install
+npm run dev
+```
 
-Progressive AI Profile: An offline, quantized LLM (e.g., Llama 3 8B or Mistral) that builds a running pedagogical model of the user's progress. It tracks concepts chapter-by-chapter without spoiling future material.
+Open [http://localhost:3000](http://localhost:3000). **Settings** lets you point at a local Ollama server; without it, the tutor uses a small built-in mock so the flow still works.
 
-Frictionless Voice Interrogation: Push-to-talk querying allowing users to ask for translations, summaries, or conceptual breakdowns without breaking the reading flow.
+## What’s in the MVP
 
-Automated Synaxis (Anki Sync): AI-generated flashcards and highlights seamlessly exported to Anki for spaced repetition, with future cloud architecture planned for community-voted chapter decks.# Tabor
+- PDF viewing (PDF.js) with page text for the tutor
+- Highlights and read position stored locally
+- AI chat route: optional Ollama, otherwise mock responses and optional `JSON_CARDS` parsing into stored flashcards
+- Anki-friendly TSV export
+- Airlock: N reviews per day or 8-hour period on `tabor`-tagged cards
+- Focus mode overlay (from the home screen) with page-count exit from the reader
+
+Cloud voting, true AnkiConnect sync, STT, wake-on-unlock, and EPUB are not in this slice.
