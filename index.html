@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tabor MVP</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="panel sidebar">
+        <div class="brand">
+          <div class="logo">T</div>
+          <div>
+            <p class="eyebrow">Offline-first active reading</p>
+            <h2>Tabor MVP</h2>
+          </div>
+        </div>
+
+        <section class="hero">
+          <h1>Read, ask, remember.</h1>
+          <p class="muted">A static prototype for focused ebook/PDF study with local-AI style guidance.</p>
+          <div class="stats-grid">
+            <div class="stat">
+              <span class="label">Pages</span>
+              <strong id="pageCount">0</strong>
+            </div>
+            <div class="stat">
+              <span class="label">Cards</span>
+              <strong id="ankiCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section id="airlockPanel" class="mini-card" data-locked="true">
+          <p class="label"><span class="status-dot"></span><span id="focusStatus">Airlock active</span></p>
+          <h2>Study lock</h2>
+          <p id="unlockStatus" class="muted">Read 3 pages or finish 6 cards.</p>
+          <div class="progress-track">
+            <div id="focusProgress" class="progress-bar"></div>
+          </div>
+          <p id="timerDisplay" class="muted">0:00 focus window</p>
+          <div class="controls">
+            <button id="readPageButton">Flip page</button>
+            <button id="reviewCardsButton" class="secondary">Review cards</button>
+          </div>
+        </section>
+
+        <section class="mini-card">
+          <h2>Progressive profile</h2>
+          <p id="spoilerGuard" class="muted"></p>
+          <ul id="profileList" class="stack"></ul>
+        </section>
+      </aside>
+
+      <main class="main">
+        <section class="panel reader">
+          <div class="reader-header">
+            <div>
+              <p id="bookTitle" class="eyebrow"></p>
+              <h2 id="chapterTitle"></h2>
+              <div class="book-meta">
+                <span id="chapterMeta" class="pill"></span>
+                <span class="pill">Local model simulation</span>
+                <span class="pill">No cloud required</span>
+              </div>
+            </div>
+            <button id="finishChapterButton">Finish chapter</button>
+          </div>
+          <p id="chapterBody" class="page-content"></p>
+          <div class="translation">
+            <p class="label">Auto-translation preview</p>
+            <p id="translationPanel"></p>
+          </div>
+        </section>
+
+        <section class="panel assistant-card">
+          <div>
+            <p class="eyebrow">Speech/text at one press</p>
+            <h2>Embedded AI tutor</h2>
+          </div>
+          <div id="aiTranscript" class="assistant-response"></div>
+          <div class="assistant-input">
+            <label>
+              Ask while reading
+              <textarea id="promptInput" rows="3">What should I remember from this page?</textarea>
+            </label>
+            <div class="controls">
+              <button id="voiceButton">Press to speak</button>
+              <button id="askButton" class="secondary">Ask AI</button>
+              <button id="saveSuggestionsButton" class="ghost">Save suggestions</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="panel insights">
+        <section class="stack">
+          <h2>Saved notes and highlights</h2>
+          <ul id="artifactList" class="stack"></ul>
+        </section>
+
+        <section class="stack">
+          <h2>Flashcards</h2>
+          <ul id="flashcardList" class="stack"></ul>
+        </section>
+
+        <section class="stack">
+          <h2>Chapter quiz</h2>
+          <ol id="quizList" class="stack"></ol>
+        </section>
+
+        <section class="stack">
+          <h2>Community top cards</h2>
+          <ul id="communityDeck" class="stack"></ul>
+        </section>
+
+        <section class="stack">
+          <h2>Anki export</h2>
+          <textarea id="exportOutput" rows="6" readonly></textarea>
+          <button id="copyExportButton">Copy TSV</button>
+        </section>
+      </aside>
+    </div>
+
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>

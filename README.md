@@ -1,15 +1,26 @@
-Tabor: Active Reading & Cognitive Illumination
-Overview
-Tabor is an offline-first, AI-integrated reading environment designed to bridge the gap between passive consumption and active retention. It combines a distraction-free digital ecosystem with localized LLM processing to turn any text into a bidirectional learning experience.
+# Tabor: Active Reading & Cognitive Illumination
 
-Core Features for MVP
+Tabor is an offline-first reading MVP that turns EPUB/PDF-style content into an active learning session. The prototype is dependency-free and runs as a static web app so the product loop can be tested quickly on desktop or tablet browsers.
 
-The Airlock Protocol: A rigorous digital minimalism feature. Tabor can be set to auto-launch in Kiosk Mode upon morning alarm dismissal. Users must complete a set number of pages or their daily Anki flashcard review to "unlock" the rest of the device.
+## MVP scope
 
-Daily Strategic Briefing Dashboard: A morning overview screen tracking reading streaks, pending spaced-repetition cards, and AI-generated synthesis from the previous day's chapters.
+- Distraction-aware reader with a page-based focus airlock.
+- Offline-style assistant panel for summaries, questions, translations, notes, quotes, and flashcards.
+- Progressive AI profile that only references chapters the reader has completed.
+- Anki-ready TSV export for generated flashcards.
+- Community deck preview modeled after Kindle popular highlights.
+- Lightweight tests for the learning and focus logic.
 
-Progressive AI Profile: An offline, quantized LLM (e.g., Llama 3 8B or Mistral) that builds a running pedagogical model of the user's progress. It tracks concepts chapter-by-chapter without spoiling future material.
+## Run locally
 
-Frictionless Voice Interrogation: Push-to-talk querying allowing users to ask for translations, summaries, or conceptual breakdowns without breaking the reading flow.
+```bash
+npm run serve
+```
 
-Automated Synaxis (Anki Sync): AI-generated flashcards and highlights seamlessly exported to Anki for spaced repetition, with future cloud architecture planned for community-voted chapter decks.# Tabor
+Open `http://localhost:4173`.
+
+## Test
+
+```bash
+npm test
+```
