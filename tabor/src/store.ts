@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export interface Book {
+export type Book = {
   id: string;
   title: string;
   author: string;
@@ -13,7 +13,7 @@ export interface Book {
   created_at: string;
 }
 
-export interface Highlight {
+export type Highlight = {
   id: string;
   book_id: string;
   page: number;
@@ -23,7 +23,7 @@ export interface Highlight {
   created_at: string;
 }
 
-export interface Flashcard {
+export type Flashcard = {
   id: string;
   book_id: string | null;
   book_title: string;
@@ -40,7 +40,7 @@ export interface Flashcard {
   created_at: string;
 }
 
-export interface UserProfile {
+export type UserProfile = {
   streak_days: string;
   last_study_date: string;
   total_cards_reviewed: string;
@@ -57,7 +57,7 @@ export interface UserProfile {
   streak: number;
 }
 
-interface AppState {
+type AppState = {
   sidebarOpen: boolean;
   setSidebarOpen: (v: boolean) => void;
   currentBookId: string | null;
