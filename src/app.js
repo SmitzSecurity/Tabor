@@ -13,7 +13,7 @@ import {
   updateProgress
 } from './core.js';
 
-const state = {
+const initialState = {
   book: readingLibrary[0],
   currentChapter: readingLibrary[0].chapters[1],
   currentPage: 1,
@@ -30,6 +30,15 @@ const state = {
   selectedDeck: 'Deep Work MVP',
   communityCards: chapterDeck('deep-work-1')
 };
+
+const state = {};
+
+function resetState() {
+  Object.assign(state, structuredClone(initialState), {
+    focusSession: createFocusSession({ requiredPages: 3, dueCards: 0 }),
+    communityCards: chapterDeck('deep-work-1')
+  });
+}
 
 const els = {};
 
@@ -207,6 +216,11 @@ function wireEvents() {
     render();
   });
 
+  document.getElementById('resetDemoButton').addEventListener('click', () => {
+    resetState();
+    render();
+  });
+
   document.getElementById('finishChapterButton').addEventListener('click', () => {
     const nextChapter = state.book.chapters[2];
     state.progress = {
@@ -226,6 +240,7 @@ function wireEvents() {
   });
 }
 
+resetState();
 cacheElements();
 wireEvents();
 render();
