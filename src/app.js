@@ -18,9 +18,9 @@ const state = {
   currentChapter: readingLibrary[0].chapters[1],
   currentPage: 1,
   progress: { completedChapterIds: ['atomic-habits-1'], currentChapterId: 'deep-work-1' },
-  focusSession: createFocusSession({ requiredPages: 3, dueCards: 6 }),
+  focusSession: createFocusSession({ requiredPages: 3, dueCards: 0 }),
   notes: [],
-  flashcards: chapterDeck('deep-work-1'),
+  flashcards: [],
   transcript: [
     {
       from: 'assistant',
@@ -75,7 +75,7 @@ function renderReader() {
   els.chapterBody.textContent = state.currentChapter.text;
   els.chapterMeta.textContent = `Chapter ${state.currentChapter.order} • ${state.currentChapter.pages} pages • ${state.currentChapter.language}`;
   els.pageCount.textContent = state.focusSession.pagesRead;
-  els.ankiCount.textContent = state.focusSession.completedCards;
+  els.ankiCount.textContent = state.flashcards.length;
 
   const profile = buildKnowledgeProfile(readingLibrary, state.progress);
   els.profileList.innerHTML = profile.knownConcepts
@@ -90,10 +90,14 @@ function renderFocus() {
   const unlocked = isContentUnlocked(state.focusSession);
   const pagesLeft = Math.max(0, state.focusSession.requiredPages - state.focusSession.pagesRead);
   const cardsLeft = Math.max(0, state.focusSession.dueCards - state.focusSession.completedCards);
+  const unlockOptions = [`Read ${pagesLeft} more page${pagesLeft === 1 ? '' : 's'}`];
+  if (state.focusSession.dueCards > 0) {
+    unlockOptions.push(`finish ${cardsLeft} more card${cardsLeft === 1 ? '' : 's'}`);
+  }
   els.focusStatus.textContent = unlocked ? 'Unlocked' : 'Airlock active';
   els.unlockStatus.textContent = unlocked
     ? 'Device/content access is open. Focus session complete.'
-    : `Read ${pagesLeft} more page${pagesLeft === 1 ? '' : 's'} or finish ${cardsLeft} more card${cardsLeft === 1 ? '' : 's'}.`;
+    : `${unlockOptions.join(' or ')} to unlock.`;
   els.focusProgress.style.width = `${state.focusSession.progressPercent}%`;
   els.airlockPanel.dataset.locked = String(!unlocked);
   els.timerDisplay.textContent = `${state.focusSession.minutesRemaining}:00 focus window`;
@@ -152,7 +156,10 @@ function askTutor(prompt) {
   }
 
   if (answer.suggestedFlashcard) {
-    state.flashcards.unshift(answer.suggestedFlashcard);
+    state.flashcards.unshift({
+      ...answer.suggestedFlashcard,
+      id: `${answer.suggestedFlashcard.id}-${state.flashcards.length + 1}`
+    });
   }
 
   render();
@@ -196,7 +203,7 @@ function wireEvents() {
   });
 
   document.getElementById('reviewCardsButton').addEventListener('click', () => {
-    state.focusSession = updateProgress(state.focusSession, { completedCards: state.focusSession.completedCards + 2 });
+    state.focusSession = updateProgress(state.focusSession, { completedCards: state.focusSession.completedCards + 1 });
     render();
   });
 

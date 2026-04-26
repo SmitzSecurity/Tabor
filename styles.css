@@ -201,6 +201,11 @@ h3 {
   font-size: 1.45rem;
 }
 
+.stat span:last-child {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
 .lock-config {
   margin-top: 1rem;
 }
@@ -316,6 +321,10 @@ textarea {
   border-radius: 999px;
   background: var(--good);
   margin-right: 0.35rem;
+}
+
+[data-locked="true"] .status-dot {
+  background: var(--warn);
 }
 
 .focus-overlay {

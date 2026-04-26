@@ -107,7 +107,7 @@ export function createFocusSession({ requiredPages = 3, dueCards = 6, requiredMi
 export function updateProgress(session, changes = {}) {
   const next = { ...session, ...changes };
   const pagePercent = next.requiredPages ? Math.min(next.pagesRead / next.requiredPages, 1) : 1;
-  const cardPercent = next.dueCards ? Math.min(next.completedCards / next.dueCards, 1) : 1;
+  const cardPercent = next.dueCards ? Math.min(next.completedCards / next.dueCards, 1) : 0;
   const progressPercent = Math.round(Math.max(pagePercent, cardPercent) * 100);
 
   return {
@@ -120,7 +120,7 @@ export function updateProgress(session, changes = {}) {
 }
 
 export function isContentUnlocked(session) {
-  return session.pagesRead >= session.requiredPages || session.completedCards >= session.dueCards;
+  return session.pagesRead >= session.requiredPages || (session.dueCards > 0 && session.completedCards >= session.dueCards);
 }
 
 export function buildFocusState({
