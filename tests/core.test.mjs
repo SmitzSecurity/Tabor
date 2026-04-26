@@ -45,6 +45,7 @@ test("suggested artifacts create highlights, notes, and flashcards", () => {
 
   assert.equal(artifacts.highlights.length, 1);
   assert.match(artifacts.notes[1], /compound habit growth/);
+  assert.match(artifacts.flashcards[0].front, /chapter synthesis/);
   assert.match(artifacts.flashcards[0].back, /focus ritual/);
 });
 

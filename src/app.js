@@ -142,11 +142,13 @@ function addAssistantMessage(text) {
 }
 
 function askTutor(prompt) {
+  const sequence = state.flashcards.length + state.notes.length + 1;
   const answer = askOfflineTutor({
     prompt,
     chapter: state.currentChapter,
     progress: state.progress,
-    library: readingLibrary
+    library: readingLibrary,
+    sequence
   });
   state.transcript.push({ from: 'user', text: prompt });
   addAssistantMessage(answer.text);
@@ -156,10 +158,7 @@ function askTutor(prompt) {
   }
 
   if (answer.suggestedFlashcard) {
-    state.flashcards.unshift({
-      ...answer.suggestedFlashcard,
-      id: `${answer.suggestedFlashcard.id}-${state.flashcards.length + 1}`
-    });
+    state.flashcards.unshift(answer.suggestedFlashcard);
   }
 
   render();
@@ -185,7 +184,8 @@ function wireEvents() {
   });
 
   document.getElementById('saveSuggestionsButton').addEventListener('click', () => {
-    const suggestions = suggestLearningArtifacts(state.currentChapter, state.progress, readingLibrary);
+    const sequence = state.flashcards.length + state.notes.length + 1;
+    const suggestions = suggestLearningArtifacts(state.currentChapter, state.progress, readingLibrary, sequence);
     state.notes.unshift(...suggestions.notes.map((text) => createNote({ text, chapterId: state.currentChapter.id })));
     state.flashcards.unshift(...suggestions.flashcards.map((card) => createFlashcard({
       ...card,

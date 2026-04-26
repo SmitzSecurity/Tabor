@@ -150,7 +150,7 @@ export function buildFocusState({
 export function askOfflineTutor({ prompt, chapter, progress, library }) {
   const profile = buildKnowledgeProfile(library, progress);
   const lowerPrompt = prompt.toLowerCase();
-  const artifacts = suggestLearningArtifacts(chapter, progress, library);
+  const artifacts = suggestLearningArtifacts(chapter, progress, library, "voice reflection");
   const response = {
     text: "",
     translation: translateText(chapter.text),
@@ -177,22 +177,22 @@ export function askOfflineTutor({ prompt, chapter, progress, library }) {
   return response;
 }
 
-export function suggestLearningArtifacts(chapter, progress, library) {
+export function suggestLearningArtifacts(chapter, progress, library, reason = "chapter synthesis") {
   const profile = buildKnowledgeProfile(library, progress);
   const firstSentence = chapter.text.split(".")[0].trim();
 
   return {
     notes: [
-      `${chapter.title}: ${chapter.concepts.map((item) => item.concept).join(" + ")}.`,
+      `${reason}: ${chapter.title} centers on ${chapter.concepts.map((item) => item.concept).join(" + ")}.`,
       `Connection prompt: relate ${chapter.concepts[0].concept} to ${profile.knownConcepts[0]?.concept ?? "today's reading"}.`
     ],
     highlights: [firstSentence],
     flashcards: [
       {
-        front: `What should you remember from ${chapter.title}?`,
+        front: `${reason}: what should you remember from ${chapter.title}?`,
         back: chapter.concepts.map((item) => `${item.concept}: ${item.note}`).join(" "),
         deck: "Tabor MVP",
-        tags: [chapter.id, "ai-generated"]
+        tags: [chapter.id, "ai-generated", slugify(reason)]
       }
     ]
   };
