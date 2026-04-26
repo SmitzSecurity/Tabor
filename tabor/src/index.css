@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #1a1a2e;
+  --bg-card: #16213e;
+  --accent: #6366f1;
+  --accent-glow: rgba(99,102,241,0.3);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* PDF viewer */
+.react-pdf__Page { margin: 0 auto; }
+.react-pdf__Page__canvas { display: block; margin: 0 auto; border-radius: 4px; }
+.react-pdf__Page__textContent { display: none; }
+.react-pdf__Page__annotations { display: none; }
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes pulse-ring { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
+
+.animate-fade-in { animation: fadeIn 0.3s ease-out; }
+.animate-slide-in { animation: slideIn 0.3s ease-out; }
+
+/* Glassmorphism */
+.glass {
+  background: rgba(22, 33, 62, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+/* Highlight colors */
+.highlight-yellow { background: rgba(251,191,36,0.35); border-bottom: 2px solid rgba(251,191,36,0.8); }
+.highlight-blue { background: rgba(59,130,246,0.35); border-bottom: 2px solid rgba(59,130,246,0.8); }
+.highlight-green { background: rgba(16,185,129,0.35); border-bottom: 2px solid rgba(16,185,129,0.8); }
+.highlight-pink { background: rgba(236,72,153,0.35); border-bottom: 2px solid rgba(236,72,153,0.8); }
+
+/* Focus mode overlay */
+.focus-lock { position: fixed; inset: 0; z-index: 9999; background: var(--bg-primary); }
+
+/* Card flip */
+.card-inner { transition: transform 0.6s; transform-style: preserve-3d; }
+.card-flipped .card-inner { transform: rotateY(180deg); }
+.card-front, .card-back { backface-visibility: hidden; }
+.card-back { transform: rotateY(180deg); }
