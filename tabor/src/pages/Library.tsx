@@ -2,7 +2,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { BookOpen, Upload, Trash2, Search, Plus, Clock } from 'lucide-react';
-import { api, Book, useAppStore } from '../store';
+import { api, useAppStore } from '../store';
+import type { Book } from '../store';
 
 export function Library() {
   const [books, setBooks] = useState<Book[]>([]);

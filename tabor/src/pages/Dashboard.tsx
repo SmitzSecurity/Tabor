@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Flame, Layers, Clock, ChevronRight, Star, Brain, Zap } from 'lucide-react';
-import { api, UserProfile, Book, Flashcard } from '../store';
+import { api } from '../store';
+import type { UserProfile } from '../store';
+import type { Book } from '../store';
+import type { Flashcard } from '../store';
 
 export function Dashboard() {
   const [profile, setProfile] = useState<UserProfile | null>(null);

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Layers, Plus, ThumbsUp, Trash2, RotateCcw, Check, X, Brain } from 'lucide-react';
-import { api, Flashcard, useAppStore } from '../store';
+import { api, useAppStore } from '../store';
+import type { Flashcard } from '../store';
 
 export function Flashcards() {
   const [searchParams] = useSearchParams();

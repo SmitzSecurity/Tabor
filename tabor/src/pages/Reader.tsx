@@ -5,7 +5,8 @@ import {
   ChevronLeft, ChevronRight, Brain, ZoomIn, ZoomOut,
   Highlighter, MessageSquare, BookOpen, List, Mic
 } from 'lucide-react';
-import { api, Book, Highlight, useAppStore } from '../store';
+import { api, useAppStore } from '../store';
+import type { Book, Highlight } from '../store';
 import { AIPanel } from '../components/AIPanel';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;

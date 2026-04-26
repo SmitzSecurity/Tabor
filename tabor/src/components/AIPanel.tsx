@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { X, Send, Mic, MicOff, Sparkles, Plus, Brain } from 'lucide-react';
-import { api, useAppStore, Flashcard } from '../store';
+import { api, useAppStore } from '../store';
+import type { Flashcard } from '../store';
 
 interface Message {
   role: 'user' | 'assistant';
